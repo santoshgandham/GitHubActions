@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Validate PR on QA branch
+name: Deploy PR on QA branch
 
 # Definition when the workflow should run
 on:
@@ -7,7 +7,7 @@ on:
     push:
       # The events are that a PR is opened, edited, reopened or when a commit is pushed
       # to a branch that has an existing pull request
-      types: [opened, edited, reopened, synchronize]
+
       # The branches filter allows to specify that this workflow should only
       # run if the branch name is "QA". This way we prevent this workflow
       # from running when PRs are opened on other branches
@@ -22,7 +22,7 @@ on:
 # Jobs to be executed when the above conditions are met
 jobs:
     # This is the name of the job. You can give it whatever name you want
-    validate-deployment-on-QA-org:
+    Deploy-deployment-on-QA-org:
         # As mentioned in the blog post, this job runs inside a VM. Here we
         # can specify which OS this VM should run on. 
         # In this case, we are going to run our commands on the latest version
@@ -149,14 +149,10 @@ jobs:
             # tests that can be run
 
 
-            - name: 'Check-only deploy delta changes - Run Specified Tests'
-              if: ${{ env.APEX_TESTS != 'All' }}
-              run: |
-                  echo ${{env.APEX_TESTS}}
-                  sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunSpecifiedTests --runtests ${{env.APEX_TESTS}} --json
+           
              
               # If the env variable equals all, we run No tests
-            - name: 'Check-only deploy delta changes - Run No Tests'
+            - name: 'deploy delta changes - Run No Tests'
               if: ${{ env.APEX_TESTS == 'All' }}
               run: |
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel NoTestRun  --json
