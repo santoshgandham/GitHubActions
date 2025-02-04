@@ -159,3 +159,17 @@ jobs:
                        
             - name: 'Deploy destructive changes (if any)'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --ignorewarnings 
+
+            - name: 'Send Email Notification'
+              uses: dawidd6/action-send-mail@v3
+              with:
+                server_address: smtp.gmail.com
+                server_port: 587
+                username: ${{ secrets.EMAIL_USERNAME }}
+                password: ${{ secrets.EMAIL_PASSWORD }}
+                subject: "Salesforce Deployment Status - QA"
+                to: santoshgandham1@gmail.com
+                from: "GitHub Actions <santoshgandham1@gmail.com>"
+                body: "The Salesforce deployment check-only validation on the QA branch has completed. Please review the results in the GitHub Actions logs."
+                content_type: text/plain
+
